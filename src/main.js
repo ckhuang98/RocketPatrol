@@ -3,7 +3,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene: [ Menu, Play ]
+    scene: [ Menu, Play, Play2 ]
 }
 
 // main game object
@@ -17,3 +17,6 @@ game.settings = {
 
 // reserve keyboard vars
 let keyUP, keyLEFT, keyRIGHT, keyONE, keyTWO, keyA, keyD, keyW, keyBACKSPACE;
+
+//highscore var
+let highScore = 0;

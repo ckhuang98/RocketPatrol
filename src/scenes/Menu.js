@@ -47,11 +47,14 @@ class Menu extends Phaser.Scene {
         let textSpacer = 64;
 
 
-        this.add.text(centerX, centerY- 2*textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Use ←→ arrows to move & ↑ to Fire', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY- 3*textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY - 2*textSpacer, 'High Score:' + highScore, menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY - textSpacer, 'Use 1 or 2 to choose num. of players', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY, 'P1: Use ←→ arrows to move & ↑ to Fire', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + textSpacer, 'P2: Use A & D to move & W to Fire', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
-        this.add.text(centerX, centerY + textSpacer, 'Press ← for Easy or → for Hard', menuConfig).setOrigin(0.5);  
+        this.add.text(centerX, centerY + 2*textSpacer, 'Press ← for Easy or → for Hard', menuConfig).setOrigin(0.5);  
         
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -62,28 +65,45 @@ class Menu extends Phaser.Scene {
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(keyONE)){
-            game.multiPlayer = false;
+            game.settings = {
+                multiplayer: false,
+                spaceshipSpeed: 0,
+                gameTimer: 0,
+            }
+            this.sound.play('sfx_select');
         }
         if(Phaser.Input.Keyboard.JustDown(keyTWO)){
-            game.multiPlayer = true;
+            game.settings = {
+                multiplayer: true,
+                spaceshipSpeed: 0,
+                gameTimer: 0,
+            }
+            this.sound.play('sfx_select');
         }
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             // easy mode
-            game.settings = {
-                spaceshipSpeed: 3,
-                gameTimer: 6000, 
-            }
+            game.settings.spaceshipSpeed = 3;
+            game.settings.gameTimer = 60000;
+            
             this.sound.play('sfx_select');
-            this.scene.start("playScene");    
+            if(game.settings.multiplayer == false){
+                this.scene.start("playScene");    
+            } else if(game.settings.multiplayer == true){
+                this.scene.start("playScene2");
+            }
+            
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             // hard mode
-            game.settings = {
-                spaceshipSpeed: 4,
-                gameTimer: 4500    
-            }
+            game.settings.spaceshipSpeed = 4;
+            game.settings.gameTimer = 45000;
+
             this.sound.play('sfx_select');
-            this.scene.start("playScene");    
+            if(game.settings.multiplayer == false){
+                this.scene.start("playScene");    
+            } else if(game.settings.multiplayer == true){
+                this.scene.start("playScene2");
+            }    
         }
     }
 }
