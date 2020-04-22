@@ -81,12 +81,12 @@ class Play extends Phaser.Scene {
             color: '#843605',
             align: 'right',
             padding: {
-                top: 3,
-                bottom: 3,
+                top: 2,
+                bottom: 2,
             },
             fixedWidth: 200
         }
-        this.add.text(220, 4, "High Score:", highScoreConfig);
+        this.add.text(220, 6, "High Score:", highScoreConfig);
         this.scoreMiddle = this.add.text(269, 54, this.highScore, scoreConfig);
 
         // game over flag
@@ -117,6 +117,14 @@ class Play extends Phaser.Scene {
             if(this.p1Score > this.highScore){
                 this.highScore = this.p1Score;
             }
+        }
+        if(this.clock.getElapsedSeconds() >= 3){
+            if(game.settings.spaceshipSpeed == 3){
+                game.settings.spaceshipSpeed = 5;
+            } else{
+                game.settings.spaceshipSpeed = 6;
+            }
+            console.log('speed up');
         }
 
         this.starfield.tilePositionX -= 4;  // scroll tile sprite
