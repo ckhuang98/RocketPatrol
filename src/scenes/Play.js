@@ -101,6 +101,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Fire to Restart or BACKSPACE for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
+            this.clock.startAt = 0;
         }, null, this);
     }
 
@@ -112,12 +113,6 @@ class Play extends Phaser.Scene {
             if(this.p1Score > this.highScore){
                 this.highScore = this.p1Score;
             }
-            if(game.settings.spaceshipSpeed == 5){
-                game.settings.spaceshipSpeed == 3;
-            } else if(game.settings.spaceshipSpeed == 6){
-                game.settings.spaceshipSpeed == 4;
-            }
-            this.loop++;
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyBACKSPACE)) {
             this.scene.start("menuScene");
@@ -128,13 +123,13 @@ class Play extends Phaser.Scene {
             }
             this.loop = 0;
         }
-        if(this.clock.getElapsedSeconds() - game.settings.gameTimer * this.loop >= 3){
+        console.log(this.clock.getElapsedSeconds());
+        if(this.clock.getElapsedSeconds() >= 3){
             if(game.settings.spaceshipSpeed == 3){
                 game.settings.spaceshipSpeed = 5;
-            } else{
+            } else if(game.settings.spaceshipSpeed == 4){
                 game.settings.spaceshipSpeed = 6;
             }
-            console.log(this.clock.getRepeatCount());
         }
 
         this.starfield.tilePositionX -= 4;  // scroll tile sprite
@@ -143,6 +138,12 @@ class Play extends Phaser.Scene {
             this.ship01.update();           // update spaceships (x3)
             this.ship02.update();
             this.ship03.update();
+            this.clock.startAt = 0;
+            if(game.settings.spaceshipSpeed == 5){
+                game.settings.spaceshipSpeed = 3;
+            } else if(game.settings.spaceshipSpeed == 6){
+                game.settings.spaceshipSpeed = 4;
+            }
         }             
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
