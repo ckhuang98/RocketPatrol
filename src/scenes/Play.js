@@ -16,6 +16,8 @@ class Play extends Phaser.Scene {
     isPlaying = false;
     //global var for keeping track of highscores
     highScore = 0;
+    //loop count and elapsed time count
+    loop = 0;
     
 
     create() {
@@ -45,9 +47,10 @@ class Play extends Phaser.Scene {
         this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setOrigin(0,0);
 
         // define keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyBACKSPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKSPACE);
 
         // animation config
         this.anims.create({
@@ -96,35 +99,42 @@ class Play extends Phaser.Scene {
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, '(F)ire to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Fire to Restart or BACKSPACE for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
     }
 
     update() {
         // check key input for restart / menu
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyUP)) {
             this.scene.restart();
             this.isPlaying = true;
             if(this.p1Score > this.highScore){
                 this.highScore = this.p1Score;
             }
+            if(game.settings.spaceshipSpeed == 5){
+                game.settings.spaceshipSpeed == 3;
+            } else if(game.settings.spaceshipSpeed == 6){
+                game.settings.spaceshipSpeed == 4;
+            }
+            this.loop++;
         }
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyBACKSPACE)) {
             this.scene.start("menuScene");
             this.isPlaying = false;
             this.bgm.stop();
             if(this.p1Score > this.highScore){
                 this.highScore = this.p1Score;
             }
+            this.loop = 0;
         }
-        if(this.clock.getElapsedSeconds() >= 3){
+        if(this.clock.getElapsedSeconds() - game.settings.gameTimer * this.loop >= 3){
             if(game.settings.spaceshipSpeed == 3){
                 game.settings.spaceshipSpeed = 5;
             } else{
                 game.settings.spaceshipSpeed = 6;
             }
-            console.log('speed up');
+            console.log(this.clock.getRepeatCount());
         }
 
         this.starfield.tilePositionX -= 4;  // scroll tile sprite
@@ -137,15 +147,18 @@ class Play extends Phaser.Scene {
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset();
-            this.shipExplode(this.ship03);   
+            this.shipExplode(this.ship03);
+            this.clock.delay += 1000;   
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
+            this.clock.delay += 1000;
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+            this.clock.delay += 1000;
         }
     }
 

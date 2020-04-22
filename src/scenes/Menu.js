@@ -47,8 +47,8 @@ class Menu extends Phaser.Scene {
         let textSpacer = 64;
 
 
-        this.add.text(centerX, centerY- textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Use ←→ arrows to move & (F) to Fire', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY- 2*textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY, 'Use ←→ arrows to move & ↑ to Fire', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
         this.add.text(centerX, centerY + textSpacer, 'Press ← for Easy or → for Hard', menuConfig).setOrigin(0.5);  
@@ -56,14 +56,22 @@ class Menu extends Phaser.Scene {
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     }
 
     update() {
+        if(Phaser.Input.Keyboard.JustDown(keyONE)){
+            game.multiPlayer = false;
+        }
+        if(Phaser.Input.Keyboard.JustDown(keyTWO)){
+            game.multiPlayer = true;
+        }
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             // easy mode
             game.settings = {
                 spaceshipSpeed: 3,
-                gameTimer: 6000    
+                gameTimer: 6000, 
             }
             this.sound.play('sfx_select');
             this.scene.start("playScene");    
