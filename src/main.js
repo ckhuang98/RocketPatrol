@@ -5,7 +5,6 @@ Points Breakdown:
     Add your own (copyright-free) background music to the Play scene (10)
     implement the speed increase that happens after 30 seconds in the original game (10)
     Allow the player to control the Rocket after it's fired (10)
-    Create a new title screen (15)
     Implement a new timing/scoring mechanism that adds time to the clock for successful hits (25)
     Implement a simultaneous two-player mode (50)
 */
