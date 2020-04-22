@@ -11,10 +11,20 @@ class Play extends Phaser.Scene {
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
+    
+    //global var keeps track of whether bgm is playing
+    isPlaying = false;
+    
 
     create() {
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        
+        
+        if(this.isPlaying == false){
+            this.bgm = this.sound.add('theme');
+            this.bgm.play();
+        }
 
         // white rectangle borders
         this.add.rectangle(5, 5, 630, 32, 0xFFFFFF).setOrigin(0, 0);
@@ -77,9 +87,12 @@ class Play extends Phaser.Scene {
         // check key input for restart / menu
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.scene.restart();
+            this.isPlaying = true;
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.scene.start("menuScene");
+            this.isPlaying = false;
+            this.bgm.stop();
         }
 
         this.starfield.tilePositionX -= 4;  // scroll tile sprite
