@@ -28,10 +28,24 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
+        let highScoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 3,
+                bottom: 3,
+            },
+            fixedWidth: 200
+        }
+
         // show menu text
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
         let textSpacer = 64;
+
 
         this.add.text(centerX, centerY- textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
         this.add.text(centerX, centerY, 'Use ←→ arrows to move & (F) to Fire', menuConfig).setOrigin(0.5);

@@ -14,6 +14,8 @@ class Play extends Phaser.Scene {
     
     //global var keeps track of whether bgm is playing
     isPlaying = false;
+    //global var for keeping track of highscores
+    highScore = 0;
     
 
     create() {
@@ -71,6 +73,22 @@ class Play extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(69, 54, this.p1Score, scoreConfig);
 
+        // High score display
+        let highScoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 3,
+                bottom: 3,
+            },
+            fixedWidth: 200
+        }
+        this.add.text(220, 4, "High Score:", highScoreConfig);
+        this.scoreMiddle = this.add.text(269, 54, this.highScore, scoreConfig);
+
         // game over flag
         this.gameOver = false;
 
@@ -88,11 +106,17 @@ class Play extends Phaser.Scene {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.scene.restart();
             this.isPlaying = true;
+            if(this.p1Score > this.highScore){
+                this.highScore = this.p1Score;
+            }
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.scene.start("menuScene");
             this.isPlaying = false;
             this.bgm.stop();
+            if(this.p1Score > this.highScore){
+                this.highScore = this.p1Score;
+            }
         }
 
         this.starfield.tilePositionX -= 4;  // scroll tile sprite
