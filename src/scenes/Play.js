@@ -120,7 +120,6 @@ class Play extends Phaser.Scene {
                 highScore = this.p1Score;
             }
         }
-        console.log(this.clock.getElapsedSeconds());
         if(this.clock.getElapsedSeconds() >= 30){
             if(game.settings.spaceshipSpeed == 3){
                 game.settings.spaceshipSpeed = 5;
@@ -184,6 +183,7 @@ class Play extends Phaser.Scene {
         });
         // score increment and repaint
         this.p1Score += ship.points;
+        console.log(this.p1Score);
         this.scoreLeft.text = this.p1Score;     
         // play sound
         this.sound.play('sfx_explosion');  
